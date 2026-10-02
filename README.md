@@ -75,6 +75,8 @@ cd claude-lead-os
 
 Full catalog and a "build your own skill in 10 minutes" walkthrough: [docs/10-extras.md](docs/10-extras.md).
 
+**Third-party plugins (optional):** `./automation/install-recommended.sh` shows the plan; `--apply` installs Anthropic's `document-skills`, `skill-creator` and `claude-md-management`. Everything else is opt-in, see [docs/11](docs/11-skill-library.md).
+
 ## Docs
 
 | # | Doc | Read it for |
@@ -89,6 +91,7 @@ Full catalog and a "build your own skill in 10 minutes" walkthrough: [docs/10-ex
 | 08 | [Best practices](docs/08-best-practices.md) | Research across Anthropic docs and the best community repos |
 | 09 | [A day in the life](docs/09-day-in-the-life.md) | What a lead's week looks like with this running |
 | 10 | [Extras](docs/10-extras.md) | More skills, subagents, commands, build-your-own |
+| 11 | [Skill library](docs/11-skill-library.md) | Third-party skills and plugins worth installing, how to vet them, credits |
 
 ## Principles
 
