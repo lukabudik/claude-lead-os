@@ -1,0 +1,11 @@
+# Applied to every scheduled skill run. The working directory is $BRAIN_DIR.
+Read
+Glob
+Grep
+# Edit(path) rules also govern the Write tool. ./** = inside the vault only.
+Edit(./**)
+Bash(date *)
+Bash(ls *)
+Bash(mkdir -p *)
+Bash(wc *)
+Skill

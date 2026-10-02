@@ -1,0 +1,8 @@
+# Run logs from automation/run-skill.sh: local only
+.logs/
+.DS_Store
+
+# Candidate data: never push to a shared remote
+people/candidates/
+# Skill cursors (machine-local)
+.state/

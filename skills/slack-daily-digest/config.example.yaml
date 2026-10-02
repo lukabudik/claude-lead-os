@@ -1,0 +1,62 @@
+# slack-daily-digest configuration
+# Copy to $BRAIN_DIR/.config/slack-daily-digest.yaml and edit. The skill reads that path first,
+# then falls back to this example (and says so in its report).
+#
+# Channel IDs are more reliable than names (names change, search by name is fuzzy).
+# Find an ID: open the channel in Slack > channel name > About > bottom of the panel.
+
+me:
+  # Your Slack member ID (profile > ... > Copy member ID). Used for mentions and "from:me" search.
+  user_id: "U00000000"
+  # Words that mean "this is about me" besides an @-mention: your nickname, your role, your teams.
+  keywords: ["<your-name>", "tribe lead", "@platform-leads"]
+
+# Tier 1: read every message and every thread since the last run. Your own team channels,
+# leadership channel, incident channel. Keep this list short (5-10); it drives cost.
+tier1:
+  - id: "C00000001"
+    name: "#team-channel"
+    project: q4-roadmap          # optional: facts from here go to projects/q4-roadmap/STATUS.md
+  - id: "C00000002"
+    name: "#leads-sync"
+  - id: "C00000003"
+    name: "#incidents"
+    incident: true               # always surface incident starts/resolutions as must-act/FYI
+
+# Tier 2: skim. Top-level messages only, open a thread only if it mentions you, your keywords,
+# a decision word, or has 10+ replies. Wider team, cross-functional, announcements.
+tier2:
+  - id: "C00000010"
+    name: "#engineering"
+  - id: "C00000011"
+    name: "#product"
+  - id: "C00000012"
+    name: "#announcements"
+
+# Everything you are a member of that is not tier1/tier2/mute counts as tier 3:
+# mentions and keyword hits only.
+tier3_default: mentions_only     # or: skip
+
+# Never read. Social, bots, noisy alerts you watch elsewhere.
+mute:
+  - "#random"
+  - "#deploy-bot"
+  - "C00000099"
+
+# Always include DMs and group DMs (mpim). Group DMs often carry the real decisions.
+include_dms: true
+include_group_dms: true
+
+# Relevance boosts used for ranking (see SKILL.md step 4).
+boost_words:
+  decision: ["decided", "agreed", "going with", "final call", "approved", "we will"]
+  incident: ["incident", "outage", "sev1", "sev2", "rollback", "degraded", "down"]
+  ask: ["can you", "could you", "please review", "need your", "waiting on you", "thoughts?"]
+
+limits:
+  max_lookback_hours: 72         # never read further back than this, even after a long break
+  max_messages_per_channel: 200
+  max_threads_opened: 40
+
+# Where durable facts go when a channel has no project mapping.
+default_knowledge_dir: knowledge

@@ -1,0 +1,7 @@
+# Plaud recordings -> meetings/. Local Plaud MCP server named "plaud".
+mcp__plaud__list_files
+mcp__plaud__get_file
+mcp__plaud__get_note
+mcp__plaud__get_transcript
+mcp__plaud__get_current_user
+# Using Granola / Fireflies / Zoom instead? Add that connector's read tools here.

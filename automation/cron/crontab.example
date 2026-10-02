@@ -1,0 +1,23 @@
+# claude-lead-os - Linux (or any cron) schedule.
+# Install: replace /path/to/claude-lead-os and ~/brain, then `crontab -e` and paste.
+#
+# cron does NOT run missed jobs: if the machine is off or asleep at 07:30, that
+# morning's run is skipped. On a laptop, consider anacron or a systemd timer with
+# Persistent=true instead.
+#
+# cron's PATH is minimal; run-skill.sh adds ~/.local/bin, /usr/local/bin, etc.
+# Auth: run `claude` once interactively so credentials exist, or export
+# CLAUDE_CODE_OAUTH_TOKEN (from `claude setup-token`) in ~/.config/claude-lead-os/env.
+#
+# m  h  dom mon dow  command
+SHELL=/bin/bash
+BRAIN_DIR=/home/you/brain
+
+# Weekdays 07:30 - plaud-daily-ingest -> slack-daily-digest -> morning-brief
+30 7  *   *   1-5   /path/to/claude-lead-os/automation/daily.sh  >> /home/you/brain/.logs/cron-morning.log 2>&1
+
+# Fridays 16:00 - weekly-second-brain -> team-health-radar -> kb-gardener
+0  16 *   *   5     /path/to/claude-lead-os/automation/weekly.sh >> /home/you/brain/.logs/cron-weekly.log 2>&1
+
+# One-off skill by hand (any time):
+#   /path/to/claude-lead-os/automation/run-skill.sh meeting-prep "my 14:00 with the platform squad"

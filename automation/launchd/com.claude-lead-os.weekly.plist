@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Fridays 16:00: weekly-second-brain -> team-health-radar -> kb-gardener (automation/weekly.sh).
+  Placeholders __HOME__, __REPO__, __BRAIN_DIR__ are filled in by install.sh when run with the with-launchd flag.
+  Manual install:
+    sed -e "s|__HOME__|$HOME|g" -e "s|__REPO__|$PWD|g" -e "s|__BRAIN_DIR__|$HOME/brain|g" \
+      automation/launchd/com.claude-lead-os.weekly.plist > ~/Library/LaunchAgents/com.claude-lead-os.weekly.plist
+    launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.claude-lead-os.weekly.plist
+  Run now:   launchctl kickstart gui/$(id -u)/com.claude-lead-os.weekly
+  Remove:    launchctl bootout gui/$(id -u)/com.claude-lead-os.weekly
+  If the Mac is asleep at the scheduled time, launchd runs the job once on wake.
+-->
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.claude-lead-os.weekly</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/bash</string>
+    <string>__REPO__/automation/weekly.sh</string>
+  </array>
+
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>HOME</key>
+    <string>__HOME__</string>
+    <key>BRAIN_DIR</key>
+    <string>__BRAIN_DIR__</string>
+    <key>PATH</key>
+    <string>__HOME__/.local/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+  </dict>
+
+  <key>WorkingDirectory</key>
+  <string>__BRAIN_DIR__</string>
+
+  <key>StartCalendarInterval</key>
+  <array>
+    <dict>
+      <key>Weekday</key><integer>5</integer>
+      <key>Hour</key><integer>16</integer>
+      <key>Minute</key><integer>0</integer>
+    </dict>
+  </array>
+
+  <key>RunAtLoad</key>
+  <false/>
+
+  <key>StandardOutPath</key>
+  <string>__BRAIN_DIR__/.logs/launchd-weekly.out.log</string>
+  <key>StandardErrorPath</key>
+  <string>__BRAIN_DIR__/.logs/launchd-weekly.err.log</string>
+</dict>
+</plist>

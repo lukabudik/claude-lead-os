@@ -1,0 +1,11 @@
+# Per-team health from Slack, meeting notes and the tracker, read-only.
+mcp__claude_ai_Slack__slack_read_channel
+mcp__claude_ai_Slack__slack_read_thread
+mcp__claude_ai_Slack__slack_search_public_and_private
+mcp__claude_ai_Slack__slack_search_channels
+mcp__claude_ai_Linear__list_issues
+mcp__claude_ai_Linear__get_issue
+mcp__claude_ai_Linear__list_projects
+mcp__claude_ai_Linear__get_project
+mcp__claude_ai_Linear__list_cycles
+# Jira instead of Linear? Replace the Linear lines with your Jira server's read tools.
