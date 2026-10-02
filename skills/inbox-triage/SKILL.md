@@ -78,6 +78,9 @@ Today's `daily/YYYY-MM-DD.md`, marked block:
 
 Chat: the Act list and the drafts, nothing else.
 
+After writing, append one line to `log.md` (format in `skills/README.md`), e.g.
+`- 2026-10-02 07:45 inbox-triage 3 act, 4 reply drafts [[2026-10-02]]`.
+
 ## Guardrails
 
 - **Never send, reply, forward, archive, label, mark read, trash, or delete.** Read-only plus

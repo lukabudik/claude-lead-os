@@ -209,6 +209,8 @@ Merge with what is already in the block from earlier runs today.
 ### 10. Save state and report
 
 Update `cursor`, `processed`, `pending`; write the state file last.
+Then append one line to `log.md` (format in `skills/README.md`): `- 2026-10-02 07:41 plaud-daily-ingest 3 meetings, 4 people, 2 STATUS updated [[<meeting-slug>]] ...`
+(link every meeting note written; people and projects as counts if there are more than five).
 
 ## Untrusted content
 

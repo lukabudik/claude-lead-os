@@ -9,6 +9,8 @@
 #   - keeps a Mac awake while it runs (caffeinate -i)
 #   - runs `claude -p "/<skill> ..."` in dontAsk mode with a scoped tool allowlist
 #   - caps turns, dollars and wall-clock time
+#   - sets CLO_HEADLESS=1 and attaches claude/hooks/block-outbound-headless.sh as a
+#     PreToolUse hook, so no tool that can send data out runs unattended (lethal trifecta)
 #   - logs to $BRAIN_DIR/.logs/<skill>-<YYYY-MM-DD>.log
 #   - raises a desktop notification on failure
 #
@@ -175,6 +177,21 @@ CMD=("$CLAUDE_BIN" -p "$PROMPT"
 [[ ${#ALLOWED[@]} -gt 0 ]] && CMD+=(--allowedTools "${ALLOWED[@]}")
 [[ ${#DENIED[@]} -gt 0 ]] && CMD+=(--disallowedTools "${DENIED[@]}")
 
+# --- outbound guard (lethal trifecta: private data + untrusted input + a way out) ---
+# The hook denies send/post/reply/WebFetch/curl-style calls whenever CLO_HEADLESS=1.
+# It is attached here via --settings so the guard holds even if settings.json was never
+# merged; hook entries merge across settings sources, and an identical handler from
+# settings.json runs only once (code.claude.com/docs/en/hooks).
+export CLO_HEADLESS=1
+export BRAIN_DIR
+if [[ -f "${HOME}/.claude/hooks/block-outbound-headless.sh" ]]; then
+  GUARD_CMD="bash ~/.claude/hooks/block-outbound-headless.sh" # same string as settings.example.json
+else
+  GUARD_CMD="bash '${SCRIPT_DIR%/automation}/claude/hooks/block-outbound-headless.sh'"
+fi
+GUARD_SETTINGS="{\"hooks\":{\"PreToolUse\":[{\"matcher\":\"^(Bash|WebFetch|WebSearch|mcp__.*)\$\",\"hooks\":[{\"type\":\"command\",\"command\":\"${GUARD_CMD}\",\"timeout\":5}]}]}}"
+CMD+=(--settings "$GUARD_SETTINGS")
+
 # --- run ----------------------------------------------------------------------
 cd "$BRAIN_DIR"
 
@@ -186,6 +203,7 @@ if ! "$CLAUDE_BIN" auth status >/dev/null 2>&1; then
 fi
 log "start: ${SKILL} (turns<=${MAX_TURNS}, budget<=\$${MAX_BUDGET}, timeout=${TIMEOUT_SECS}s)"
 log "allow: ${ALLOWED[*]:-<none>}"
+log "guard: CLO_HEADLESS=1, PreToolUse ${GUARD_CMD}"
 start_ts=$(date +%s)
 
 # stdin from /dev/null: -p must not wait on a terminal that is not there.

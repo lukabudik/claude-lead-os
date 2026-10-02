@@ -83,6 +83,9 @@ people/candidates/2026-09-30-senior-em-finalist-b.md
 After the user confirms they sent it (in whatever form), append one line to the recipient's
 person file under `## Sent updates`: `- 2026-10-02: daily update, asks: retry rollout, candidate call`.
 
+After writing, append one line to `log.md` (format in `skills/README.md`), e.g.
+`- 2026-10-02 17:30 stakeholder-update draft for [[<recipient>]] in [[2026-10-02]]`.
+
 ## Guardrails
 
 - **Draft, never send.** This skill has no permission to post to Slack or email. The user

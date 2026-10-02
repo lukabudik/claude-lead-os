@@ -113,6 +113,7 @@ Rules:
 ### 6. Show and report
 
 Print the block in chat so the owner can read it before the meeting, then the report.
+Then append one line to `log.md` (format in `skills/README.md`): `- 2026-10-02 10:15 one-on-one-prep agenda added [[<person-slug>]]`.
 
 ## Never store
 

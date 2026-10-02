@@ -76,7 +76,9 @@ relying on them.
 | Decision log | ADR practice | `decisions/YYYY-MM-DD-<slug>.md`, filled by the `decision-log` skill |
 | Lint as a scheduled job | Karpathy, claude-obsidian | The `kb-gardener` skill runs weekly and proposes edits instead of applying them silently |
 | Dated facts | obsidian-second-brain freshness policy ("timeless, dated, or a pointer") | Volatile facts carry a date, and the gardener flags old ones |
-| Index-first navigation | Karpathy, auto memory | `MEMORY.md` index plus folder READMEs. Grep before reading |
+| Index-first navigation | Karpathy, auto memory | `index.md` catalog rebuilt weekly by `kb-gardener`, plus the `MEMORY.md` index. Read the index, then grep |
+| Append-only log | Karpathy | `log.md`: every vault-writing skill appends `- YYYY-MM-DD HH:MM <skill> <what> [[links]]`; the SessionStart hook injects the last 10 lines |
+| Goals file | mimurchison | `me/goals.md`: morning-brief tags priorities with goal ids and flags drift, weekly-second-brain scores the week |
 
 ### What we deliberately skipped
 
@@ -203,7 +205,7 @@ A leader's setup has all three out of the box.
 | Control | Setting / practice |
 |---|---|
 | Never auto-send | Every send/post/email skill is `disable-model-invocation: true` and ends with a draft. Prosser: "My system never sends an email — it drafts." |
-| Deny send tools in headless jobs | `--disallowedTools` with the exact MCP tool names (check `/mcp`), or `permissions.deny` in the job's settings |
+| Deny send tools in headless jobs | `--disallowedTools` with the exact MCP tool names (check `/mcp`), plus `claude/hooks/block-outbound-headless.sh`: a PreToolUse hook that denies any send/post/reply/WebFetch/curl-shaped call when `CLO_HEADLESS=1`, matched by regex, so a tool you forgot to list is still caught |
 | Enforce with settings, not prose | `permissions.deny` for `Read(./.env)`, credential paths and send tools. CLAUDE.md "never do X" is a request, a deny rule or `PreToolUse` hook is enforcement |
 | Least-privilege connectors | Read-only scopes where the vendor offers them, and only the channels and calendars you need. Anthropic "does not security-audit or manage any MCP server" |
 | Review before acting on ingested text | Digest output is a summary for you. Action items extracted from a transcript are proposals until you confirm them |
@@ -305,3 +307,30 @@ Each link was opened and read for this document.
 | [Kyle Gao: Using Claude Code with Obsidian](https://kyleygao.com/blog/2025/using-claude-code-with-obsidian/) | Practitioner account: removing friction is why the KB actually gets used |
 | [HN: Orchestrating Claude Code agents, the chief of staff pattern](https://news.ycombinator.com/item?id=49772806) | Comments documenting the over-engineering spiral of agent fleets |
 | [HN: Anyone using Claude Code for non-coding workflows?](https://news.ycombinator.com/item?id=45528463) | Folder-per-topic beats chat history. Voice capture into an Obsidian vault |
+
+---
+
+## 9. Credits: where each mechanism came from
+
+Ideas the kit turned into working parts. Each source was re-read on 2026-10-02 before the
+mechanism was built, and the file credits it inline.
+
+| Mechanism | Idea from | Where it lives here |
+|---|---|---|
+| `index.md` catalog, read first, rebuilt by the gardener | Andrej Karpathy, [llm-wiki](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f) | `vault/index.md`, `skills/kb-gardener` (Index section), `skills/ask-my-brain` step 2.0 |
+| `log.md` append-only, greppable timeline | Andrej Karpathy, llm-wiki | `vault/log.md`, `vault/CLAUDE.md`, `skills/README.md` shared rules, a log step in every vault-writing skill, lint in `kb-gardener` |
+| Lint pass over the KB | Andrej Karpathy, llm-wiki | `skills/kb-gardener` |
+| File good answers back | Andrej Karpathy, llm-wiki | `skills/ask-my-brain` (Output) |
+| Outbound guard for unattended runs | Simon Willison, [the lethal trifecta](https://simonwillison.net/2025/Jun/16/the-lethal-trifecta/) | `claude/hooks/block-outbound-headless.sh`, `automation/run-skill.sh` (`CLO_HEADLESS=1`, `--settings`), `docs/07` |
+| Structured note-taking re-injected after compaction | Anthropic, [Effective context engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) | `claude/hooks/session-start.sh` (log tail on startup, clear and compact) |
+| Quarterly goals that score the day and the week | mimurchison, [claude-chief-of-staff](https://github.com/mimurchison/claude-chief-of-staff) | `vault/me/goals.md`, `skills/morning-brief`, `skills/weekly-second-brain` |
+| Budget caps, scoped tools, drafts not sends, layered rollout | Jim Prosser, [claude-code-cos](https://github.com/jimprosser/claude-code-cos) | `automation/run-skill.sh`, `automation/allowed-tools/`, section 5 rollout order |
+| Optional hybrid search when grep stops scaling | Tobi Lütke, [qmd](https://github.com/tobi/qmd) | `skills/ask-my-brain` step 2.4 |
+| PreToolUse deny contract, hook merge and dedupe | Anthropic, [Hooks reference](https://code.claude.com/docs/en/hooks) | `claude/hooks/block-outbound-headless.sh`, `claude/settings.example.json` |
+
+Considered and not built: a PreCompact hook that saves notes before compaction. The hooks
+reference says PreCompact output never reaches Claude (it can only block compaction), so
+re-injecting after compaction through SessionStart is the version that works. Tiered triage
+(mimurchison) and Prosser's P1-P4 were skipped because `slack-daily-digest` (must act /
+decisions / FYI) and `inbox-triage` (act / reply / read / ignore) already tier their output.
+

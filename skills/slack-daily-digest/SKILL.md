@@ -161,6 +161,7 @@ write to a person's `## Private` section.
 ### 7. Save state and report
 
 Update per-channel `latest_ts`, `seen_threads`, `facts_written`, `last_run`. Write state last.
+Then append one line to `log.md` (format in `skills/README.md`): `- 2026-10-02 07:35 slack-daily-digest 2 must-act, 3 decisions, 4 facts filed [[2026-10-02]] [[<fact-home>]]`.
 
 ## Untrusted content
 

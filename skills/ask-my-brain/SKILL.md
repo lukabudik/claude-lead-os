@@ -25,12 +25,25 @@ For a wide question across many files, delegate the search to the `kb-researcher
 1. **Parse the question** into entities (people, teams, projects), time range, and question
    type (fact, decision, history, "who owns", "what's open").
 2. **Search in this order**, stopping when you have enough:
+   0. `index.md`: the catalog (one line per page, rebuilt weekly by `kb-gardener`). Use it to
+      pick the pages to open; for "what happened recently / when did X change", grep `log.md`.
    1. Entity home files: `people/<slug>.md`, `teams/<slug>.md`, `projects/<slug>/STATUS.md`.
       Resolve names to slugs with `ls` and `grep -il`.
    2. `decisions/` for "why / when did we decide".
    3. `meetings/` and `weekly/` filtered by frontmatter: `grep -l "people:.*<slug>"`,
       `grep -l "project: <slug>"`, then by date.
-   4. Full-text: `grep -ril "<keyword>" "$BRAIN_DIR" --include=*.md`, excluding `.state/`.
+   4. Full-text. **If a qmd search is available, use it; otherwise grep.**
+      - qmd MCP server connected (tools named like `mcp__qmd__query`, `mcp__qmd__get`): call
+        `query` with the question (it combines keyword and semantic search with re-ranking),
+        then `get` the top hits.
+      - `qmd` CLI on PATH (`command -v qmd`): `qmd query "<question>"` (hybrid) or
+        `qmd search "<keywords>"` (keyword only, fast).
+      - Neither: `grep -ril "<keyword>" "$BRAIN_DIR" --include=*.md`, excluding `.state/`, and
+        try synonyms, because grep only finds the exact word.
+      qmd hits are pointers, not answers: open the file and cite the actual line. qmd is Tobi
+      Lütke's local markdown search (github.com/tobi/qmd); index only the vault
+      (`qmd collection add ~/brain --name brain`). It indexes `people/candidates/` too; the
+      guardrail on `## Private` and candidate content below still applies to every answer.
    5. `.memory/MEMORY.md` and memory files for preferences and how-we-work facts.
    Read the actual lines; never answer from filenames.
 3. **Resolve conflicts.** If two notes disagree, prefer the newer dated note, and say both
@@ -59,7 +72,8 @@ Searched: projects/payments-migration/, decisions/, meetings/ (people: sam-lee).
 ```
 
 If the user asks to keep the answer, write it to `knowledge/<topic-slug>.md` with the same
-citations.
+citations. Then append one line to `log.md`: `- 2026-10-02 15:00 ask-my-brain answer filed [[<topic-slug>]]`.
+This is Karpathy's "file good answers back": a filed answer compounds, a chat answer is lost.
 
 ## Guardrails
 

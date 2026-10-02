@@ -7,6 +7,13 @@
 #   1. today's date and ISO week
 #   2. ~/brain/me/current-focus.md
 #   3. today's daily note, or yesterday's "Tomorrow" section if today's doesn't exist yet
+#   4. the last entries of log.md (what skills changed recently)
+#
+# Item 4 is the "structured note-taking" half of Anthropic's context-engineering advice
+# (anthropic.com/engineering/effective-context-engineering-for-ai-agents): state lives in files
+# outside the context window and is pulled back in. The settings matcher includes "compact", so
+# after a compaction Claude gets the recent log back. PreCompact cannot do this: per the hooks
+# reference its output never reaches Claude, it can only block the compaction.
 #
 # Override the vault location with BRAIN_DIR (env var or settings.json "env").
 
@@ -14,6 +21,7 @@ set -u
 
 BRAIN_DIR="${BRAIN_DIR:-$HOME/brain}"
 MAX_LINES="${BRAIN_HOOK_MAX_LINES:-80}"   # per file, keeps the injected context cheap
+LOG_LINES="${BRAIN_HOOK_LOG_LINES:-10}"   # log.md entries to inject, 0 = none
 
 # Drain stdin (Claude Code sends hook JSON); we don't need it, but don't leave the pipe open.
 cat >/dev/null 2>&1 || true
@@ -60,6 +68,16 @@ else
       echo "### Carried over from $yesterday"
       echo "$carry"
     fi
+  fi
+fi
+
+log_file="$BRAIN_DIR/log.md"
+if [ "$LOG_LINES" -gt 0 ] 2>/dev/null && [ -f "$log_file" ]; then
+  recent=$(grep -E '^- [0-9]{4}-[0-9]{2}-[0-9]{2} ' "$log_file" | tail -n "$LOG_LINES")
+  if [ -n "$recent" ]; then
+    echo
+    echo "## Recent vault activity (last $LOG_LINES lines of $(tildify "$log_file"))"
+    echo "$recent"
   fi
 fi
 

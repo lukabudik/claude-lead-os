@@ -86,6 +86,10 @@ Two sentences: overall signal and the main reason.
 Also append one line to `people/candidates/README.md` (pipeline index): date, role, candidate
 id, stage, recommendation, retain_until.
 
+After writing, append one line to `log.md` that names the role only, never the candidate or the
+file (`log.md` is not gitignored, `people/candidates/` is):
+`- 2026-10-02 18:00 interview-debrief scorecard written for role senior-em`.
+
 ## Guardrails
 
 - **No protected-characteristic content, ever**, even if it was said in the interview.

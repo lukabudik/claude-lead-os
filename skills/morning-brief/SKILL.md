@@ -15,6 +15,7 @@ redo their work: no Slack crawling, no transcript reading.
 | Vault root | `$BRAIN_DIR` (default `~/brain`) | yes |
 | Today's events | Calendar MCP: list events for today (all calendars you own) | yes; degrade gracefully if missing |
 | Current focus | `me/current-focus.md` | yes |
+| Goals | `me/goals.md` (quarterly goals `G1`...) | optional; skip goal tags if missing |
 | Slack digest | `daily/<today>.md` block `slack-daily-digest`, else yesterday's note | optional |
 | Meetings ingested | `daily/<today>.md` block `plaud-daily-ingest` + `meetings/` from the last 2 days | optional |
 | Yesterday | `daily/<yesterday>.md` (last working day on Mondays) | optional |
@@ -78,6 +79,13 @@ not an area ("Hiring"). At least one must advance a current-focus item; if none 
 priority conflicts with a packed calendar (less than 90 min free), make it smaller rather than
 pretending.
 
+**Score against goals** (if `me/goals.md` exists): end each priority with the goal id it moves,
+`(G2)`, or `(no goal)`. In the day plan, add the goal id to the Why column where a meeting
+clearly serves one. If two of three priorities are `(no goal)`, or under a third of today's
+meeting time maps to any goal, add one line under Top 3: `Drift: today is mostly off-goal (G1,
+G3 untouched)`. State it, do not lecture. The idea is from mimurchison/claude-chief-of-staff,
+whose goals file lets Claude push back when time drifts from stated priorities.
+
 ### 5. Write the brief
 
 File: `daily/<today>.md`. Create from `templates/daily.md` if missing (or minimal frontmatter
@@ -90,9 +98,9 @@ replacing an existing `morning-brief` block:
 _Inputs: calendar 7 events · Slack digest 07:32 · 3 meetings ingested · focus updated 2026-09-28_
 
 ### Top 3
-1. [ ] Approve Q4 headcount split and reply to [[jane-doe]] (Slack must-act, due today)
-2. [ ] Draft the API deprecation decision for [[q4-roadmap]] (focus: platform migration)
-3. [ ] Unblock [[sam-lee]] on vendor contract (open loop, 4 days overdue)
+1. [ ] Approve Q4 headcount split and reply to [[jane-doe]] (Slack must-act, due today) (G2)
+2. [ ] Draft the API deprecation decision for [[q4-roadmap]] (focus: platform migration) (G1)
+3. [ ] Unblock [[sam-lee]] on vendor contract (open loop, 4 days overdue) (no goal)
 
 ### Day plan
 | Time | Meeting | Prep | Why |
@@ -121,7 +129,7 @@ Rules:
 
 ### 6. Save state and report
 
-Write `.state/morning-brief.json`. In interactive mode, print the Top 3 and the day-plan table.
+Write `.state/morning-brief.json`. Then append one line to `log.md` (format in `skills/README.md`): `- 2026-10-02 08:00 morning-brief brief written, 3 priorities (2 on goals) [[2026-10-02]]`. In interactive mode, print the Top 3 and the day-plan table.
 Headless, print the report below.
 
 ## Never store
@@ -135,6 +143,6 @@ Headless, print the report below.
 ```
 morning-brief — 2026-10-02 08:00
 7 events (2 need prep: 1:1 jane-doe, Q4 planning review) · 2h free
-Top 3 written · 5 open loops due (2 overdue)
+Top 3 written (2 on goals) · 5 open loops due (2 overdue)
 Inputs: slack digest ok · plaud ingest ok · focus last updated 4 days ago
 ```

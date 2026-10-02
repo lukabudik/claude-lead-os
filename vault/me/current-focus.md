@@ -31,5 +31,6 @@ One sentence: the outcome that defines a good quarter.
 - YYYY-MM-DD — what
 
 ## How Claude should use this
+- Quarterly goals with measures and ids live in [[goals]]; tag priorities with them.
 - Rank inbox items, digests and morning briefs against the top 3.
 - Flag anything that looks urgent but isn't on this list instead of silently dropping it.

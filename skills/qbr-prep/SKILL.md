@@ -83,6 +83,9 @@ project: qbr-2026-q3
 
 Chat report: counts (goals, decisions, shipped items), the numbers-needed list, open questions.
 
+After writing, append one line to `log.md` (format in `skills/README.md`), e.g.
+`- 2026-10-02 11:00 qbr-prep outline drafted, 6 number slots open [[qbr-2026-q4]]`.
+
 ## Guardrails
 
 - **Never invent a number.** Not a rounded one, not a "roughly". Empty slot plus a source hint.

@@ -89,6 +89,9 @@ to 3 bullets: team, signal, evidence link, suggested action.
 Final chat report: one line per team (overall colour + the worst signal), plus any private
 1:1-worthy items from step 6.
 
+After writing, append one line to `log.md` (format in `skills/README.md`), e.g.
+`- 2026-10-02 16:20 team-health-radar radar updated, 1 amber->red [[<team>]]`.
+
 ## Guardrails
 
 - **Read-only** on Slack and the tracker. No comments, no status changes, no reactions.

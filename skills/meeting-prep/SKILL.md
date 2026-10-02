@@ -117,6 +117,8 @@ recording's calendar match produces the same slug.
 
 ### 7. Save state and report
 
+Save the state file. Then append one line to `log.md` (format in `skills/README.md`): `- 2026-10-02 12:40 meeting-prep prep for <meeting> [[<daily-note>]]`.
+
 ## Never store
 
 - Dial-in codes and passcodes from the invite.

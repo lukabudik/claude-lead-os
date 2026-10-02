@@ -7,16 +7,21 @@ local rules — those load automatically when you work in that folder and overri
 
 ## Start of every session
 
-1. `me/current-focus.md` — what matters this quarter. Filter everything through it.
+1. `me/current-focus.md` — what matters this quarter. Filter everything through it. Goals with
+   measures are in `me/goals.md`.
 2. Today's `daily/YYYY-MM-DD.md` if it exists (the SessionStart hook usually injects both).
 3. Working on a project? **Read `projects/<slug>/STATUS.md` first.** Never start from memory.
 4. Talking about a person? Read `people/<slug>.md` before you say anything about them.
+5. Looking for something? Read `index.md` (the catalog) first, then grep. `log.md` says what
+   changed recently.
 
 ## Folder map
 
 | Folder | What lives here | File naming | Written by |
 |---|---|---|---|
-| `me/` | About me: bio, current focus, key people, preferences | fixed names | me, rarely Claude |
+| `index.md` | Catalog: one line per page, grouped by folder | fixed | `kb-gardener` (regenerated) |
+| `log.md` | Append-only timeline, one line per skill run | fixed | every skill that writes |
+| `me/` | About me: bio, current focus, quarterly goals, key people, preferences | fixed names | me, rarely Claude |
 | `inbox/` | Raw drops before triage: transcripts, digests, pasted threads | `YYYY-MM-DD-<source>-<slug>.md` | `plaud-daily-ingest`, `slack-daily-digest`, me |
 | `daily/` | One note per day: brief, plan, log, loose capture | `YYYY-MM-DD.md` | `morning-brief`, `slack-daily-digest` |
 | `weekly/` | Weekly review and synthesis | `YYYY-Www.md` (ISO week, e.g. `2026-W40.md`) | `weekly-second-brain` |
@@ -78,6 +83,10 @@ Hard rules:
   touched the project.
 - **Action items** use `- [ ] @owner-slug what — due YYYY-MM-DD`. Skills grep for `- [ ]`.
 - Don't reorganise folders or rename files without asking. Links break.
+- **Log every write session.** When you (or a skill) change the vault, append one line to the
+  bottom of `log.md`: `- YYYY-MM-DD HH:MM <skill or "manual"> <what changed> [[links]]`. Never
+  edit past lines. Read only the tail (`wc -l`, then Read with an offset) before appending.
+  No sensitive detail in the line: it is a table of contents, not a copy.
 
 ## Inbox → triage flow
 

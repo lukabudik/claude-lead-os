@@ -49,6 +49,7 @@ offer to append it there (`people/<slug>.md` Context log, `projects/<slug>/STATU
    if missing): `- [<Title>](<slug>.md) — <hook, under 15 words>`. Keep MEMORY.md short; if it
    is over 150 lines, tell the user to run `kb-gardener` to prune.
 5. Reply with one line: the file path and the index line.
+6. Append one line to `log.md`: `- 2026-10-02 09:12 remember memory added .memory/<slug>.md`.
 
 ## Guardrails
 

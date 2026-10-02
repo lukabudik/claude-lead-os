@@ -305,7 +305,9 @@ cat <<EOF
      Open both files and copy over the keys you want:
        ${SETTINGS_EXAMPLE}
      The important ones: "permissions" (allow read tools, deny secrets and send
-     tools), "hooks" (SessionStart context), "statusLine", "autoMemoryDirectory".
+     tools), "hooks" (SessionStart context + the PreToolUse outbound guard),
+     "statusLine", "autoMemoryDirectory". Scheduled runs attach the guard
+     themselves (run-skill.sh --settings), so it holds even before you merge.
      Also add  "env": { "BRAIN_DIR": "${BRAIN}" }  so hooks and the statusline
      find your vault.
      Check the result with:  claude doctor
